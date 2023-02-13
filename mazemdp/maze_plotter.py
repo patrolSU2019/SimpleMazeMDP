@@ -165,6 +165,9 @@ class MazePlotter:
                 color = np.zeros(3)
                 if self.maze_attr.cells[i][j] == -1:
                     color[0] = color[1] = color[2] = 0
+                elif self.maze_attr.cells[i][j] in self.terminal_states:
+                    color[1] = 0.5
+                    color[0] = color[2] = 0
                 else:
                     color[0] = color[1] = color[2] = 1
                 table.add_cell(j, i, 0.1, 0.2, facecolor=color, text="", loc="center")
