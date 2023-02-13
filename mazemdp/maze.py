@@ -104,7 +104,9 @@ class Maze:  # describes a maze-like environment
 
         if start_states is None:
             start_states = [0]
-
+        self.start_states = start_states
+        self.timeout = timeout
+        self.hit = hit
         self.last_states = last_states
         if self.last_states is None:
             self.last_states = []
@@ -271,6 +273,38 @@ class Maze:  # describes a maze-like environment
                         reward_matrix[state, W] = -0.5
 
         return reward_matrix
+
+    def change_last_states(self, last_states):
+        self.last_states = last_states
+        start_distribution = np.zeros(
+            self.nb_states
+        )  # distribution over initial states
+
+        # supposed to be uniform
+        for state in self.start_states:
+            start_distribution[state] = 1.0 / len(self.start_states)
+
+        # ##################### Transition Matrix ######################
+        transition_matrix = self.init_transitions(self.hit)
+
+        if self.hit:
+            reward_matrix = self.reward_hit_walls(transition_matrix)
+        else:
+            reward_matrix = self.simple_reward(transition_matrix)
+        plotter = MazePlotter(self)  # renders the environment
+
+        self.mdp = Mdp(
+            self.nb_states + 1,
+            self.action_space,
+            start_distribution,
+            transition_matrix,
+            reward_matrix,
+            plotter,
+            gamma=self.gamma,
+            terminal_states=[self.nb_states],
+            timeout=self.timeout,
+        )
+
 
 
 if __name__ == "__main__":
