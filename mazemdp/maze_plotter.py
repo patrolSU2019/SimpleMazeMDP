@@ -351,7 +351,7 @@ class MazePlotter:
         if state == -1:
             color[0] = color[1] = color[2] = 0
         elif state in self.terminal_states:
-            color[1] = [1 - np.max(q[state]) / (np.max(q) + 1), 1]
+            color[1] = 1 - np.max(q[state]) / (np.max(q) + 1)
             color[0] = color[2] = 0
         else:
             color[0] = color[1] = color[2] = np.min(
