@@ -64,6 +64,7 @@ def create_random_maze(width, height, ratio, hit=False):
         walls = random.sample(range(size), int(n_walls))
 
         maze = build_maze(width, height, walls, hit=hit)
+        mdp = maze.mdp
         stop = check_navigability(mdp)
     return maze
 
