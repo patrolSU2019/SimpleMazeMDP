@@ -13,14 +13,16 @@ np.random.seed(0)
 
 def test_create():
     chrono = Chrono()
-    mdp, *args = create_random_maze(5, 5, 0.2, hit=True)
+    maze = create_random_maze(5, 5, 0.2, hit=True)
+    mdp = maze.mdp
     mdp.new_render("Test visu maze")
     print(mdp.action_space)
     chrono.stop()
 
 
 def test_maze_visu():
-    mdp, *args = create_random_maze(4, 5, 0.2)
+    maze = create_random_maze(4, 5, 0.2)
+    mdp = maze.mdp
     mdp.new_render("Test visu value")
     for _ in range(3):
         random_value = np.random.random(size=(mdp.nb_states,))
@@ -38,7 +40,8 @@ def test_maze_visu():
 
 
 def test_step():
-    mdp, *args = create_random_maze(5, 4, 0.2)
+    maze = create_random_maze(5, 4, 0.2)
+    mdp = maze.mdp
     x = mdp.reset(uniform=True)
     done = mdp.done()
     random_policy = np.random.randint(mdp.action_space.n, size=(mdp.nb_states,))

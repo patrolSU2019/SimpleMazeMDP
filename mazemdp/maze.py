@@ -49,7 +49,7 @@ def build_maze(width, height, walls, hit=False):
     )  # Markov Decision Process definition
     # The MDP has one state more than the Maze
     # (the final state is outside of the maze)
-    return maze.mdp, maze.nb_states + 1, maze.coord_x, maze.coord_y
+    return maze
 
 
 def create_random_maze(width, height, ratio, hit=False):
@@ -63,9 +63,9 @@ def create_random_maze(width, height, ratio, hit=False):
     while not stop:
         walls = random.sample(range(size), int(n_walls))
 
-        mdp, nb_states, coord_x, coord_y = build_maze(width, height, walls, hit=hit)
+        maze = build_maze(width, height, walls, hit=hit)
         stop = check_navigability(mdp)
-    return mdp, nb_states, coord_x, coord_y
+    return maze
 
 
 class Maze:  # describes a maze-like environment
