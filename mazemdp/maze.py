@@ -292,19 +292,13 @@ class Maze:  # describes a maze-like environment
             reward_matrix = self.reward_hit_walls(transition_matrix)
         else:
             reward_matrix = self.simple_reward(transition_matrix)
-        plotter = MazePlotter(self)  # renders the environment
 
-        self.mdp = Mdp(
-            self.nb_states + 1,
-            self.action_space,
-            start_distribution,
-            transition_matrix,
-            reward_matrix,
-            plotter,
-            gamma=self.gamma,
-            terminal_states=[self.nb_states],
-            timeout=self.timeout,
-        )
+        self.mdp.plotter.terminal_states = self.last_states
+        self.mdp.plotter.start_states = self.start_states
+        self.mdp.P = transition_matrix
+        self.mdp.r = reward_matrix
+        self.mdp.P0 = start_distribution
+        self.mdp.terminals = self.last_states
 
 
 
