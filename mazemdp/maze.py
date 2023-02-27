@@ -3,7 +3,7 @@ Author: Olivier Sigaud
 """
 
 import random
-import gym
+import gymnasium as gym
 
 import numpy as np
 
