@@ -108,9 +108,6 @@ class Maze:  # describes a maze-like environment
         self.start_states = start_states
         self.timeout = timeout
         self.hit = hit
-        self.last_states = last_states
-        if self.last_states is None:
-            self.last_states = []
 
         self.well = self.nb_states  # all the final states' transitions go there
 
@@ -137,6 +134,19 @@ class Maze:  # describes a maze-like environment
         for state in start_states:
             start_distribution[state] = 1.0 / len(start_states)
 
+        self.tr = []
+        self.r = []
+        for last_state in range(self.nb_states):
+            self.last_states = [last_state]
+            tr = self.init_transitions(hit)
+            self.tr.append(tr)
+            if hit:
+                self.r.append(self.reward_hit_walls(tr))
+            else:
+                self.r.append(self.simple_reward(tr))
+        self.last_states = last_states
+        if self.last_states is None:
+            self.last_states = []
         # ##################### Transition Matrix ######################
         transition_matrix = self.init_transitions(hit)
 
@@ -158,6 +168,8 @@ class Maze:  # describes a maze-like environment
             terminal_states=[self.nb_states],
             timeout=timeout,
         )
+
+
 
     def init_states(self, width, height, walls):
         state = 0
@@ -277,27 +289,16 @@ class Maze:  # describes a maze-like environment
 
     def change_last_states(self, last_states):
         self.last_states = last_states
-        start_distribution = np.zeros(
-            self.nb_states
-        )  # distribution over initial states
-
-        # supposed to be uniform
-        for state in self.start_states:
-            start_distribution[state] = 1.0 / len(self.start_states)
 
         # ##################### Transition Matrix ######################
-        transition_matrix = self.init_transitions(self.hit)
+        transition_matrix = self.tr[last_states[0]]
 
-        if self.hit:
-            reward_matrix = self.reward_hit_walls(transition_matrix)
-        else:
-            reward_matrix = self.simple_reward(transition_matrix)
+        reward_matrix = self.r[last_states[0]]
 
         self.mdp.plotter.terminal_states = self.last_states
         self.mdp.plotter.start_states = self.start_states
         self.mdp.P = transition_matrix
         self.mdp.r = reward_matrix
-        self.mdp.P0 = start_distribution
         self.mdp.terminals = self.last_states
 
 
