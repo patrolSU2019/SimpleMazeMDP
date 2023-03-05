@@ -102,7 +102,7 @@ class Mdp:
             policy = np.array([])
 
         if not self.has_state:
-            return self.plotter.render(v=v, agent_state=None, title=title, mode=mode)
+            return self.plotter.render(v=v, policy=policy, agent_state=None, title=title, mode=mode)
         elif agent_pos is not None:
             return self.plotter.render(
                 v=v, agent_state=agent_pos, title=title, mode=mode
