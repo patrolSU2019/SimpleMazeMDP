@@ -2,8 +2,8 @@
 Author: Olivier Sigaud
 """
 
+from functools import cached_property
 import random
-import gym
 
 import numpy as np
 
@@ -122,7 +122,7 @@ class Maze:  # describes a maze-like environment
         self.init_states(width, height, walls)
 
         # ##################### Action Space ######################
-        self.action_space = gym.spaces.Discrete(nb_actions)
+        self.nb_actions = nb_actions
 
         # ##################### Distribution Over Initial States ######################
 
@@ -169,7 +169,12 @@ class Maze:  # describes a maze-like environment
             timeout=timeout,
         )
 
+    @cached_property
+    def action_space(self):
+        """Legacy method to get the action space"""
+        import gym
 
+        return gym.spaces.Discrete(self.nb_actions)
 
     def init_states(self, width, height, walls):
         state = 0
@@ -208,7 +213,6 @@ class Maze:  # describes a maze-like environment
             for j in range(self.height):
                 state = self.cells[i][j]
                 if not state == -1:
-
                     # Transition Matrix when going north (no state change if highest cells or cells under a wall)
                     if j == 0 or self.cells[i][j - 1] == -1:
                         transition_matrix[state][N][state] = 1.0
@@ -260,7 +264,6 @@ class Maze:  # describes a maze-like environment
             for j in range(self.height):
                 state = self.cells[i][j]
                 if not state == -1:
-
                     # Reward Matrix when going north
                     if (
                         j == 0 or self.cells[i][j - 1] == -1
@@ -300,7 +303,6 @@ class Maze:  # describes a maze-like environment
         self.mdp.P = transition_matrix
         self.mdp.r = reward_matrix
         self.mdp.terminals = self.last_states
-
 
 
 if __name__ == "__main__":
