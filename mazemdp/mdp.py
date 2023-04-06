@@ -80,6 +80,7 @@ class Mdp:
         info = {
             "State transition probabilities": self.P[self.current_state, u, :],
             "reward's noise value": noise,
+            "TimeLimit.truncated": self.timestep == self.timeout,
         }  # can be used when debugging
 
         self.current_state = next_state
@@ -102,7 +103,9 @@ class Mdp:
             policy = np.array([])
 
         if not self.has_state:
-            return self.plotter.render(v=v, policy=policy, agent_state=None, title=title, mode=mode)
+            return self.plotter.render(
+                v=v, policy=policy, agent_state=None, title=title, mode=mode
+            )
         elif agent_pos is not None:
             return self.plotter.render(
                 v=v, agent_state=agent_pos, title=title, mode=mode
