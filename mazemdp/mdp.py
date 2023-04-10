@@ -74,17 +74,17 @@ class Mdp:
         # the state reached when performing action u from state x is sampled
         # according to the discrete distribution self.P[x,u,:]
         next_state = sample_categorical(self.P[self.current_state, u, :])
-
         self.timestep += 1
 
+        done = self.done()  # checks if the episode is over
         info = {
             "State transition probabilities": self.P[self.current_state, u, :],
             "reward's noise value": noise,
-            "TimeLimit.truncated": self.timestep == self.timeout,
+            "TimeLimit.truncated": self.timestep == self.timeout
+            and not self.current_state in self.terminal_states,
         }  # can be used when debugging
 
         self.current_state = next_state
-        done = self.done()  # checks if the episode is over
 
         return [next_state, reward, done, info]
 
