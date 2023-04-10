@@ -302,7 +302,7 @@ class Maze:  # describes a maze-like environment
         self.mdp.plotter.start_states = self.start_states
         self.mdp.P = transition_matrix
         self.mdp.r = reward_matrix
-        self.mdp.terminals = self.last_states
+        self.mdp.terminal_states = self.last_states
 
 
 if __name__ == "__main__":
