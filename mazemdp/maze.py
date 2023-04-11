@@ -292,11 +292,14 @@ class Maze:  # describes a maze-like environment
 
     def change_last_states(self, last_states):
         self.last_states = last_states
+        goal = self.last_states[0]
 
         # ##################### Transition Matrix ######################
-        transition_matrix = self.tr[last_states[0]]
+        transition_matrix = self.tr[goal]
 
-        reward_matrix = self.r[last_states[0]]
+        reward_matrix = self.r[goal]
+        self.coord_x[-1] = self.coord_x[goal]
+        self.coord_y[-1] = self.coord_y[goal]
 
         self.mdp.plotter.terminal_states = self.last_states
         self.mdp.plotter.start_states = self.start_states
